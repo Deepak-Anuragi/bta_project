@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { TicTacToeAI } from '../utils/AIEngine';
+import {
+  isPlayerTurn,
+  validateMove,
+  getTurnMessage,
+  getPlayerSymbol,
+  getOpponentAddress,
+  formatAddress,
+  GAME_STATUS,
+  PLAYER
+} from '../utils/gameLogic';
 import './GameBoard.css';
 
 const GameBoard = ({ gameContract, gameId, account, onBack }) => {
@@ -218,18 +228,22 @@ const GameBoard = ({ gameContract, gameId, account, onBack }) => {
       return true;
     }
     
-    // Online game - check contract rules
-    if (!game || game.status !== 1) return false; // 1 = IN_PROGRESS
-    
-    const isPlayerX = game.playerX.toLowerCase() === account.toLowerCase();
-    const isPlayerO = game.playerO.toLowerCase() === account.toLowerCase();
-    
-    if (!isPlayerX && !isPlayerO) return false;
-    
-    if (game.currentTurn === 1 && !isPlayerX) return false; // PLAYER_X turn
-    if (game.currentTurn === 2 && !isPlayerO) return false; // PLAYER_O turn
-    
-    return true;
+    // Online game - use robust validation
+    if (!game || game.status !== GAME_STATUS.IN_PROGRESS) {
+      return false;
+    }
+
+    const validationResult = validateMove(
+      board,
+      position,
+      game.currentTurn,
+      account,
+      game.playerX,
+      game.playerO,
+      game.status
+    );
+
+    return validationResult.valid;
   };
 
   const getCellSymbol = (value) => {
@@ -244,28 +258,18 @@ const GameBoard = ({ gameContract, gameId, account, onBack }) => {
     return '';
   };
 
-  const formatAddress = (address) => {
-    if (!address) return '';
-    return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
-  };
-
   const getStatusText = () => {
     if (!game) return 'Loading...';
     
-    if (game.status === 0) return 'Waiting for opponent...';
-    if (game.status === 2) {
-      if (game.winner === 0) return 'Game ended in a draw';
-      const winnerAddr = game.winner === 1 ? game.playerX : game.playerO;
-      return `Winner: ${formatAddress(winnerAddr)}`;
-    }
-    if (game.status === 3) return 'Game cancelled';
-    
-    if (!account) return '⏳ Loading...';
-    
-    const isYourTurn = (game.currentTurn === 1 && game.playerX && game.playerX.toLowerCase() === account.toLowerCase()) ||
-                       (game.currentTurn === 2 && game.playerO && game.playerO.toLowerCase() === account.toLowerCase());
-    
-    return isYourTurn ? '🎯 Your turn!' : '⏳ Opponent\'s turn...';
+    // Use robust getTurnMessage function
+    return getTurnMessage(
+      game.status,
+      game.currentTurn,
+      account,
+      game.playerX,
+      game.playerO,
+      game.winner
+    );
   };
 
   if (!game) {

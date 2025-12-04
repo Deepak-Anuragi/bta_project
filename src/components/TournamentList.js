@@ -55,8 +55,9 @@ const TournamentList = ({ tournamentContract, account }) => {
           entryFee: tournament[2],
           prizePool: tournament[3],
           maxPlayers: Number(tournament[4]),
-          currentRound: Number(tournament[5]),
-          status: tournament[6],
+          gamesPlayed: Number(tournament[5]),
+          totalGamesToPlay: Number(tournament[6]),
+          status: tournament[7],
           players: players
         });
       }
@@ -221,6 +222,14 @@ const TournamentList = ({ tournamentContract, account }) => {
                   <span className="label">Creator:</span>
                   <span className="value">{formatAddress(tournament.creator)}</span>
                 </div>
+                {tournament.status === 1 && (
+                  <div className="detail-row">
+                    <span className="label">Progress:</span>
+                    <span className="value">
+                      {tournament.gamesPlayed} / {tournament.totalGamesToPlay} Games
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="tournament-players">

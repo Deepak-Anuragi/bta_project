@@ -31,7 +31,7 @@ export const TOURNAMENT_ABI = [
   "function getTournamentPlayers(uint256 tournamentId) external view returns (address[])",
   "function getPlayerScore(uint256 tournamentId, address player) external view returns (uint256)",
   "function getActiveTournaments() external view returns (uint256[])",
-  "function tournaments(uint256) external view returns (string memory name, address creator, uint256 entryFee, uint256 prizePool, uint256 maxPlayers, uint256 currentRound, uint8 status, uint256 createdAt, address winner)",
+  "function tournaments(uint256) external view returns (string memory name, address creator, uint256 entryFee, uint256 prizePool, uint256 maxPlayers, uint256 gamesPlayed, uint256 totalGamesToPlay, uint8 status, uint256 createdAt, address winner)",
   "event TournamentCreated(uint256 indexed tournamentId, string name, address creator, uint256 entryFee, uint256 maxPlayers)",
   "event PlayerRegistered(uint256 indexed tournamentId, address indexed player)",
   "event TournamentStarted(uint256 indexed tournamentId)",
