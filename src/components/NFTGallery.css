@@ -4,8 +4,36 @@
 }
 
 .gallery-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
+}
+
+.gallery-header > div {
+  text-align: left;
+}
+
+.refresh-nfts-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.refresh-nfts-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.refresh-nfts-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .gallery-header h2 {
@@ -95,30 +123,30 @@
   opacity: 1;
 }
 
-/* Rarity specific styles */
+/* Rarity specific styles - Medal themed */
 .nft-card.rarity-common {
   border-color: rgba(158, 158, 158, 0.5);
 }
 
 .nft-card.rarity-rare {
-  border-color: rgba(74, 144, 226, 0.7);
-  box-shadow: 0 5px 20px rgba(74, 144, 226, 0.3);
+  border-color: rgba(205, 127, 50, 0.8);
+  box-shadow: 0 5px 20px rgba(205, 127, 50, 0.4);
 }
 
 .nft-card.rarity-epic {
-  border-color: rgba(155, 89, 182, 0.7);
-  box-shadow: 0 5px 20px rgba(155, 89, 182, 0.3);
+  border-color: rgba(192, 192, 192, 0.9);
+  box-shadow: 0 5px 20px rgba(192, 192, 192, 0.5);
 }
 
 .nft-card.rarity-legendary {
-  border-color: rgba(243, 156, 18, 0.7);
-  box-shadow: 0 5px 25px rgba(243, 156, 18, 0.4);
-  animation: cardAppear 0.6s ease, glow 2s ease-in-out infinite;
+  border-color: rgba(255, 215, 0, 0.9);
+  box-shadow: 0 5px 25px rgba(255, 215, 0, 0.6);
+  animation: cardAppear 0.6s ease, goldGlow 2s ease-in-out infinite;
 }
 
-@keyframes glow {
-  0%, 100% { box-shadow: 0 5px 25px rgba(243, 156, 18, 0.4); }
-  50% { box-shadow: 0 5px 35px rgba(243, 156, 18, 0.7); }
+@keyframes goldGlow {
+  0%, 100% { box-shadow: 0 5px 25px rgba(255, 215, 0, 0.6); }
+  50% { box-shadow: 0 5px 35px rgba(255, 215, 0, 0.9); }
 }
 
 /* NFT Image */
@@ -135,12 +163,25 @@
 .nft-trophy {
   font-size: 6rem;
   filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
-  animation: rotate 20s linear infinite;
+  animation: bounce 2s ease-in-out infinite;
+  z-index: 2;
 }
 
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.nft-symbol {
+  position: absolute;
+  font-size: 3rem;
+  opacity: 0.3;
+  animation: sparkle 3s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
 }
 
 .nft-rarity-badge {

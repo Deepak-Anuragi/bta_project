@@ -8,7 +8,25 @@ const NFTGallery = ({ nftContract, account }) => {
 
   useEffect(() => {
     loadNFTs();
-  }, [account]);
+    
+    // Listen for new NFT mints
+    const handleNFTMinted = (player, tokenId, rarity, achievement) => {
+      if (player.toLowerCase() === account.toLowerCase()) {
+        console.log('New NFT minted!', tokenId.toString());
+        loadNFTs(); // Refresh the gallery
+      }
+    };
+    
+    if (nftContract) {
+      nftContract.on('NFTMinted', handleNFTMinted);
+    }
+    
+    return () => {
+      if (nftContract) {
+        nftContract.off('NFTMinted', handleNFTMinted);
+      }
+    };
+  }, [account, nftContract]);
 
   const loadNFTs = async () => {
     try {
@@ -39,10 +57,10 @@ const NFTGallery = ({ nftContract, account }) => {
 
   const getRarityInfo = (rarity) => {
     const rarities = [
-      { name: 'Common', color: '#gray', emoji: '⚪' },
-      { name: 'Rare', color: '#4A90E2', emoji: '🔵' },
-      { name: 'Epic', color: '#9B59B6', emoji: '🟣' },
-      { name: 'Legendary', color: '#F39C12', emoji: '🟡' }
+      { name: 'Common', color: '#gray', emoji: '🏅', symbol: '🎖️' },
+      { name: 'Rare', color: '#CD7F32', emoji: '🥉', symbol: '⭐' },
+      { name: 'Epic', color: '#C0C0C0', emoji: '🥈', symbol: '🌟' },
+      { name: 'Legendary', color: '#FFD700', emoji: '🥇', symbol: '💫' }
     ];
     return rarities[rarity] || rarities[0];
   };
@@ -62,18 +80,27 @@ const NFTGallery = ({ nftContract, account }) => {
   return (
     <div className="nft-gallery-container">
       <div className="gallery-header">
-        <h2>🎨 My NFT Collection</h2>
-        <p className="collection-count">
-          {nfts.length} NFT{nfts.length !== 1 ? 's' : ''} earned
-        </p>
+        <div>
+          <h2>🏅 My Medal Collection</h2>
+          <p className="collection-count">
+            {nfts.length} Medal{nfts.length !== 1 ? 's' : ''} & Badge{nfts.length !== 1 ? 's' : ''} earned
+          </p>
+        </div>
+        <button 
+          className="refresh-nfts-btn" 
+          onClick={loadNFTs}
+          disabled={loading}
+        >
+          {loading ? '🔄 Loading...' : '🔄 Refresh'}
+        </button>
       </div>
 
       {nfts.length === 0 ? (
         <div className="no-nfts">
           <div className="empty-state">
-            <span className="empty-icon">🏆</span>
-            <h3>No NFTs Yet</h3>
-            <p>Win games to earn unique NFT rewards!</p>
+            <span className="empty-icon">🏅</span>
+            <h3>No Medals Yet</h3>
+            <p>Win games to earn medals, badges, and stickers!</p>
           </div>
         </div>
       ) : (
@@ -86,7 +113,8 @@ const NFTGallery = ({ nftContract, account }) => {
                 className={`nft-card rarity-${rarityInfo.name.toLowerCase()}`}
               >
                 <div className="nft-image">
-                  <div className="nft-trophy">🏆</div>
+                  <div className="nft-trophy">{rarityInfo.emoji}</div>
+                  <div className="nft-symbol">{rarityInfo.symbol}</div>
                   <div className="nft-rarity-badge">
                     {rarityInfo.emoji} {rarityInfo.name}
                   </div>

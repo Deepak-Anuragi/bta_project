@@ -71,7 +71,12 @@ const GameBoard = ({ gameContract, gameId, account, onBack }) => {
       if (gId.toString() === gameId.toString()) {
         loadGame();
         const prizeEth = ethers.formatEther(prize);
-        setMessage(`🎉 Game Over! Winner: ${formatAddress(winner)} (Prize: ${prizeEth} ETH)`);
+        const isWinner = winner.toLowerCase() === account.toLowerCase();
+        setMessage(
+          isWinner 
+            ? `🎉 You Won! Prize: ${prizeEth} ETH + 🏆 NFT Reward!` 
+            : `😔 Game Over! Winner: ${formatAddress(winner)} (Prize: ${prizeEth} ETH)`
+        );
       }
     });
 
