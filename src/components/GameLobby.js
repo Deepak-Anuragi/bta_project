@@ -85,8 +85,8 @@ const GameLobby = ({ gameContract, account, onGameSelect }) => {
             playerX: game[0],
             playerO: game[1],
             betAmount: game[2],
-            status: game[6],
-            winner: game[5]
+            status: Number(game[6]),
+            winner: Number(game[5])
           });
           await new Promise(resolve => setTimeout(resolve, 50));
         } catch (err) {

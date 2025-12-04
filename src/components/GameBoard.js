@@ -98,9 +98,9 @@ const GameBoard = ({ gameContract, gameId, account, onBack }) => {
         playerX: gameData[0],
         playerO: gameData[1],
         betAmount: gameData[2],
-        currentTurn: gameData[4],
-        winner: gameData[5],
-        status: gameData[6]
+        currentTurn: Number(gameData[4]),
+        winner: Number(gameData[5]),
+        status: Number(gameData[6])
       });
       
       setBoard(boardData.map(cell => Number(cell)));

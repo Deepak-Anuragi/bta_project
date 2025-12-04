@@ -57,7 +57,7 @@ const TournamentList = ({ tournamentContract, account }) => {
           maxPlayers: Number(tournament[4]),
           gamesPlayed: Number(tournament[5]),
           totalGamesToPlay: Number(tournament[6]),
-          status: tournament[7],
+          status: Number(tournament[7]),
           players: players
         });
       }
